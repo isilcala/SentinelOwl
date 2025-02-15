@@ -12,7 +12,14 @@ class DetectionConfig(BaseModel):
     warning_threshold: float = 0.7
     critical_threshold: float = 0.85
 
+class ModelConfig(BaseModel):
+    """Configuration for AI models"""
+    type: str = "placeholder"  # Model type (e.g., "placeholder", "onnx")
+    warning_threshold: float = 0.7
+    critical_threshold: float = 0.85
+
 class AppConfig(BaseModel):
     """Main application configuration"""
     camera: CameraConfig = CameraConfig()
     detection: DetectionConfig = DetectionConfig()
+    model: ModelConfig = ModelConfig()

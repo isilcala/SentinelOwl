@@ -1,6 +1,7 @@
 import random
 from typing import NamedTuple
 from ..config import DetectionConfig
+from .models import PlaceholderModel 
 
 class DetectionResult(NamedTuple):
     """Result of defect detection"""
@@ -12,15 +13,14 @@ class DefectDetector:
     """Defect detection handler"""
 
     def __init__(self, config: DetectionConfig):
-        self.config = config
+        self.model = PlaceholderModel(
+            warning_threshold=config.warning_threshold,
+            critical_threshold=config.critical_threshold
+        )
 
     def analyze(self, frame) -> DetectionResult:
         """Analyze a frame for potential defects"""
-        # TODO: Replace with actual AI model
-        confidence = random.random()
-        is_warning = confidence > self.config.warning_threshold
-        is_critical = confidence > self.config.critical_threshold
-
+        confidence, is_warning, is_critical = self.model.predict(frame)
         return DetectionResult(
             confidence=confidence,
             is_warning=is_warning,

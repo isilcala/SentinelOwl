@@ -29,11 +29,18 @@ def test_detection_result_handling():
     )
     owl._handle_result(critical_result)
 
+# tests/test_core.py 修改测试用例
 def test_detector_initialization():
     """Test detector initialization"""
-    config = DetectionConfig()
+    config = DetectionConfig(
+        warning_threshold=0.65, 
+        critical_threshold=0.9
+    )
     detector = DefectDetector(config)
-    assert detector.config == config
+    
+    # 验证模型参数是否正确传递
+    assert detector.model.warning_threshold == 0.65
+    assert detector.model.critical_threshold == 0.9
 
 def test_detector_analysis():
     """Test detector analysis"""
