@@ -1,5 +1,7 @@
 from sentinelowl.core.engine import SentinelOwl, DetectionResult
 from sentinelowl.config import AppConfig
+from sentinelowl.core.detector import DefectDetector, DetectionResult
+from sentinelowl.config import DetectionConfig
 
 def test_sentinel_owl_initialization():
     """Test SentinelOwl initialization"""
@@ -26,3 +28,17 @@ def test_detection_result_handling():
         is_critical=True
     )
     owl._handle_result(critical_result)
+
+def test_detector_initialization():
+    """Test detector initialization"""
+    config = DetectionConfig()
+    detector = DefectDetector(config)
+    assert detector.config == config
+
+def test_detector_analysis():
+    """Test detector analysis"""
+    config = DetectionConfig(warning_threshold=0.7, critical_threshold=0.85)
+    detector = DefectDetector(config)
+    result = detector.analyze(None)  # Pass None as a mock frame
+    assert isinstance(result, DetectionResult)
+    assert 0.0 <= result.confidence <= 1.0
