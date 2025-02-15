@@ -1,6 +1,7 @@
 import numpy as np
 from sentinelowl.core.models import PlaceholderModel
 
+
 def test_placeholder_model():
     """Test the placeholder model"""
     model = PlaceholderModel()

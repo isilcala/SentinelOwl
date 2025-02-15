@@ -3,12 +3,15 @@ from dataclasses import dataclass
 from typing import Deque
 from collections import deque
 
+
 @dataclass
 class PerformanceStats:
     """Performance statistics"""
+
     fps: float
     processing_time: float
     frame_queue_size: int
+
 
 class PerformanceMonitor:
     """Performance monitoring handler"""
@@ -27,7 +30,6 @@ class PerformanceMonitor:
         """Record the end of a frame"""
         self.processing_times.append(time.time() - self.frame_times[-1])
 
-
     def get_stats(self) -> PerformanceStats:
         """Calculate performance statistics"""
         if len(self.frame_times) < 2:
@@ -41,10 +43,14 @@ class PerformanceMonitor:
             fps = (len(self.frame_times) - 1) / time_window  # N个时间间隔对应 N-1 个帧
 
         # 计算平均处理时间
-        avg_processing_time = sum(self.processing_times) / len(self.processing_times) if self.processing_times else 0.0
+        avg_processing_time = (
+            sum(self.processing_times) / len(self.processing_times)
+            if self.processing_times
+            else 0.0
+        )
 
         return PerformanceStats(
             fps=fps,
             processing_time=avg_processing_time,
-            frame_queue_size=len(self.frame_times)
+            frame_queue_size=len(self.frame_times),
         )

@@ -3,6 +3,7 @@ import time
 from typing import Optional, Tuple
 from ..config import CameraConfig
 
+
 class CameraHandler:
     """Handler for camera input"""
 
@@ -42,7 +43,9 @@ class CameraHandler:
         if self.cap is not None:
             self.cap.release()
 
-        print(f"Attempting to reconnect to camera in {self.config.reconnect_interval} seconds...")
+        print(
+            f"Attempting to reconnect to camera in {self.config.reconnect_interval} seconds..."
+        )
         time.sleep(self.config.reconnect_interval)
         self._initialize_camera()
 

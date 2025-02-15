@@ -33,9 +33,11 @@ class SentinelOwl:
     def _log_performance(self):
         """Log performance statistics"""
         stats = self.performance.get_stats()
-        print(f"📊 Performance: {stats.fps:.1f} FPS, "
-              f"Processing Time: {stats.processing_time:.3f}s")
-        
+        print(
+            f"📊 Performance: {stats.fps:.1f} FPS, "
+            f"Processing Time: {stats.processing_time:.3f}s"
+        )
+
     async def _monitor_step(self):
         """Single monitoring step"""
         frame = self.camera.capture_frame()
@@ -56,4 +58,6 @@ class SentinelOwl:
 
     def _notify_warning(self, result):
         """Notify about potential defects"""
-        print(f"⚠️ Warning: Potential defect detected (confidence: {result.confidence:.2f})")
+        print(
+            f"⚠️ Warning: Potential defect detected (confidence: {result.confidence:.2f})"
+        )

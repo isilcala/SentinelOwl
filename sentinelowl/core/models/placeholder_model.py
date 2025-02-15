@@ -2,6 +2,7 @@ import random
 import numpy as np
 from sentinelowl.core.models.base_model import BaseModel
 
+
 class PlaceholderModel(BaseModel):
     def __init__(self, warning_threshold=0.7, critical_threshold=0.85):
         self.warning_threshold = warning_threshold
@@ -12,5 +13,5 @@ class PlaceholderModel(BaseModel):
         return (
             confidence,
             confidence > self.warning_threshold,
-            confidence > self.critical_threshold
+            confidence > self.critical_threshold,
         )
