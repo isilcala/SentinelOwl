@@ -1,0 +1,29 @@
+# pyproject.toml 修正后
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentinelowl"
+version = "1.0.0"
+authors = [
+    { name = "Your Name", email = "your.email@example.com" }
+]
+description = "3D printing monitoring system with AI defect detection"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Manufacturing",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+dependencies = [
+    "pydantic>=2.0",
+    "opencv-python>=4.5",
+    "numpy>=1.21",
+    "click>=8.0"
+]
+
+[project.scripts]
+sentinelowl = "sentinelowl.cli:cli"

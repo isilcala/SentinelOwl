@@ -9,7 +9,9 @@ annotated-types==0.7.0
 black==25.1.0
     # via -r requirements/dev.in
 click==8.1.8
-    # via black
+    # via
+    #   -r requirements/base.in
+    #   black
 coverage[toml]==7.6.12
     # via pytest-cov
 flake8==7.1.1
