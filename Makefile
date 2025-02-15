@@ -72,3 +72,10 @@ clean:
 	rm -rf sentinelowl/__pycache__
 	rm -rf tests/__pycache__
 	find . -type f -name '*.pyc' -delete
+
+ci-test:
+	@pytest tests/ --cov=sentinelowl --cov-report=xml
+
+ci-lint:
+	@flake8 sentinelowl/ tests/
+	@black --check sentinelowl/ tests/
