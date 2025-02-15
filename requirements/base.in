@@ -1,0 +1,4 @@
+# Base dependencies
+pydantic
+opencv-python
+numpy
