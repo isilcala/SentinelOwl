@@ -11,24 +11,16 @@ from .performance import PerformanceMonitor
 class SentinelOwl:
     """Main application class for print monitoring"""
 
-    def __init__(self, config: AppConfig):
+    def __init__(self, config):
         self.config = config
         self.camera = CameraHandler(config.camera)
-        self.detector = DefectDetector(config.detection)
-        self.executor = ThreadPoolExecutor(max_workers=2)
-        self.performance = PerformanceMonitor()
+        self.detector = DefectDetector(config.model)
+        self.printer = PrinterController()
+        self.plugin = AIGuardPlugin(config)
 
     async def run(self):
-        """Asynchronous monitoring loop"""
-        try:
-            while True:
-                await self._monitor_step()
-                await asyncio.sleep(self.config.detection.interval)
-                self._log_performance()
-        except asyncio.CancelledError:
-            print("🦉 SentinelOwl shutdown gracefully.")
-        finally:
-            self.camera.release()
+        """Start monitoring and plugin services"""
+        await asyncio.gather(self._monitor_loop(), self._serve_plugin())
 
     def _log_performance(self):
         """Log performance statistics"""
@@ -38,12 +30,19 @@ class SentinelOwl:
             f"Processing Time: {stats.processing_time:.3f}s"
         )
 
-    async def _monitor_step(self):
-        """Single monitoring step"""
-        frame = self.camera.capture_frame()
-        if frame is not None:
-            result = self.detector.analyze(frame)
-            self._handle_result(result)
+    async def _monitor_loop(self):
+        """Continuous monitoring loop"""
+        while True:
+            frame = await self.camera.capture_frame()
+            if frame is not None:
+                result = await self.detector.analyze(frame)
+                self._handle_result(result)
+            await asyncio.sleep(1 / self.config.camera.fps)
+
+    async def _serve_plugin(self):
+        """Start Moonraker plugin service"""
+        # TODO: Implement plugin server
+        pass
 
     def _handle_result(self, result):
         """Handle detection results"""
