@@ -1,7 +1,7 @@
-from sentinelowl.core.engine import SentinelOwl, DetectionResult
-from sentinelowl.config import AppConfig
+# tests/test_core.py
+from sentinelowl.core.engine import SentinelOwl
+from sentinelowl.config import AppConfig, DetectionConfig
 from sentinelowl.core.detector import DefectDetector, DetectionResult
-from sentinelowl.config import DetectionConfig
 
 def test_sentinel_owl_initialization():
     """Test SentinelOwl initialization"""
@@ -29,7 +29,6 @@ def test_detection_result_handling():
     )
     owl._handle_result(critical_result)
 
-# tests/test_core.py 修改测试用例
 def test_detector_initialization():
     """Test detector initialization"""
     config = DetectionConfig(
