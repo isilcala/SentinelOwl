@@ -37,5 +37,15 @@ def version():
     print(f"SentinelOwl version: {__version__}")
 
 
+@cli.command()
+@click.option("--camera-url", required=True, help="URL of the camera stream")
+@click.option("--model-path", required=True, help="Path to the ONNX model")
+def validate(camera_url, model_path):
+    """Validate camera and model integration"""
+    from sentinelowl.scripts.validate import main  # 修改为从 sentinelowl.scripts 导入
+
+    main(camera_url, model_path)
+
+
 if __name__ == "__main__":
     cli()

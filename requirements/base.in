@@ -3,3 +3,4 @@ pydantic
 opencv-python
 numpy
 click
+onnxruntime

@@ -27,3 +27,6 @@ dependencies = [
 
 [project.scripts]
 sentinelowl = "sentinelowl.cli:cli"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
