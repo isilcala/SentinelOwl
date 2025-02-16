@@ -1,4 +1,4 @@
-from moonraker import MoonrakerAPI
+from moonraker import MoonrakerAPI, Server
 from fastapi import APIRouter, WebSocket
 from typing import Dict, Any
 import asyncio
@@ -26,6 +26,10 @@ class AIGuardPlugin:
             "confidence": 0.85,  # TODO: Replace with actual confidence
             "defect_type": "stringing",  # TODO: Replace with actual defect type
         }
+
+    def register_plugin(server: Server):
+        plugin = AIGuardPlugin(server)
+        server.add_router(plugin.router)
 
     async def websocket_endpoint(self, websocket: WebSocket):
         """WebSocket endpoint for real-time updates"""
