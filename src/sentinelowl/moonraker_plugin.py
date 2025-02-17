@@ -8,6 +8,7 @@ class AIGuardPlugin:
     """Moonraker plugin for SentinelOwl"""
 
     def __init__(self, config):
+        print("🦉 SentinelOwl plugin initialized!")  # 调试日志
         self.config = config
         self.router = APIRouter()
         self._setup_routes()
@@ -44,3 +45,7 @@ class AIGuardPlugin:
         """Notify all connected WebSocket clients"""
         for client in self._clients:
             await client.send_json(message)
+
+    def load_plugin(config: Dict[str, Any]) -> AIGuardPlugin:
+        """Entry point for Moonraker to load the plugin"""
+        return AIGuardPlugin(config)

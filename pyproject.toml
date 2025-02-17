@@ -18,3 +18,6 @@ sentinelowl = "sentinelowl.cli:cli"
 [tool.setuptools]
 package-dir = {"" = "src"}
 packages = ["sentinelowl"]
+
+[project.entry-points."moonraker.plugin"]
+ai_guard = "sentinelowl.moonraker_plugin:AIGuardPlugin"

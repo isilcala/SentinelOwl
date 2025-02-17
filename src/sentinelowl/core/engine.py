@@ -41,8 +41,9 @@ class SentinelOwl:
 
     async def _serve_plugin(self):
         """Start Moonraker plugin service"""
-        # TODO: Implement plugin server
-        pass
+        from moonraker import MoonrakerPlugin
+        plugin = MoonrakerPlugin()
+        await plugin.start()
 
     def _handle_result(self, result):
         """Handle detection results"""
