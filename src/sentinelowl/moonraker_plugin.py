@@ -1,7 +1,7 @@
-from moonraker import MoonrakerAPI, Server
 from fastapi import APIRouter, WebSocket
 from typing import Dict, Any
 import asyncio
+from ..core.engine import SentinelOwl
 
 
 class AIGuardPlugin:
@@ -12,6 +12,7 @@ class AIGuardPlugin:
         self.router = APIRouter()
         self._setup_routes()
         self._clients = set()
+        self.engine = SentinelOwl(config)
 
     def _setup_routes(self):
         """Register API and WebSocket routes"""
@@ -22,14 +23,10 @@ class AIGuardPlugin:
         """Get current monitoring status"""
         return {
             "status": "active",
-            "fps": 5.0,  # TODO: Replace with actual FPS
-            "confidence": 0.85,  # TODO: Replace with actual confidence
-            "defect_type": "stringing",  # TODO: Replace with actual defect type
+            "fps": self.engine.get_fps(),
+            "confidence": self.engine.get_latest_confidence(),
+            "defect_type": self.engine.get_latest_defect_type(),
         }
-
-    def register_plugin(server: Server):
-        plugin = AIGuardPlugin(server)
-        server.add_router(plugin.router)
 
     async def websocket_endpoint(self, websocket: WebSocket):
         """WebSocket endpoint for real-time updates"""
