@@ -55,12 +55,12 @@ test:
 # Lint the code
 lint:
 	@echo "Running linter..."
-	$(ACTIVATE) && flake8 sentinelowl/ tests/
+	PYTHONPATH=$PYTHONPATH:. $(ACTIVATE) && flake8 src/sentinelowl/ tests/
 
 # Format the code
 format:
 	@echo "Formatting code..."
-	$(ACTIVATE) && black sentinelowl/ tests/
+	PYTHONPATH=$PYTHONPATH:. $(ACTIVATE) && black src/sentinelowl/ tests/
 
 # Clean up
 clean:
