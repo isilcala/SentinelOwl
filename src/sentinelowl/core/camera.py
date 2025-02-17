@@ -4,10 +4,18 @@ from typing import Optional, Tuple
 from ..config import CameraConfig
 
 
+class CameraConnectionError(Exception):
+    """Custom exception for camera connection errors"""
+
+    pass
+
+
 class CameraHandler:
     """Handler for camera input"""
 
     def __init__(self, config: CameraConfig):
+        self._retry_count = 0
+        self.max_retries = 3  # ✅ 新增最大重试次数
         self.config = config
         self.cap = None
         self._initialize_camera()
@@ -39,6 +47,12 @@ class CameraHandler:
         return frame
 
     def _reconnect_camera(self):
+        if self._retry_count >= self.max_retries:
+            raise CameraConnectionError(
+                f"Failed to reconnect after {self.max_retries} attempts"
+            )
+
+        self._retry_count += 1
         """Attempt to reconnect to the camera"""
         if self.cap is not None:
             self.cap.release()

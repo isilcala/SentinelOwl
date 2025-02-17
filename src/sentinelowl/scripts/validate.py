@@ -1,3 +1,4 @@
+import os
 import cv2
 import numpy as np
 import onnxruntime as ort
@@ -5,27 +6,20 @@ from typing import Tuple
 
 
 def load_model(model_path: str) -> ort.InferenceSession:
-    """Load the ONNX model"""
-    try:
-        session = ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
-        print(f"✅ Model loaded successfully: {model_path}")
-        return session
-    except Exception as e:
-        print(f"❌ Failed to load model from {model_path}: {str(e)}")
-        raise
+    """Load the ONNX model with path validation"""
+    if not os.path.exists(model_path):
+        raise FileNotFoundError(f"Model file not found: {model_path}")
+    print(f"Loading model from: {model_path}")
+    return ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
 
 
 def preprocess_frame(
     frame: np.ndarray, target_size: Tuple[int, int] = (28, 28)
 ) -> np.ndarray:
     """Preprocess the input frame for MNIST model"""
-    # Convert to grayscale
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    # Resize to model input size
     frame = cv2.resize(frame, target_size)
-    # Normalize to [0, 1]
     frame = frame.astype(np.float32) / 255.0
-    # Add batch and channel dimensions
     frame = np.expand_dims(frame, axis=(0, 1))  # Shape: (1, 1, 28, 28)
     return frame
 
@@ -41,30 +35,31 @@ def predict(model: ort.InferenceSession, frame: np.ndarray) -> Tuple[int, float]
 
 
 def main(camera_url: str, model_path: str):
-    """Main validation function"""
+    """Main validation function with URL validation"""
+    if not camera_url.startswith(("http://", "rtsp://", "file://")):
+        raise ValueError(f"Invalid camera URL: {camera_url}")
+
     # Load model
     model = load_model(model_path)
-    print(f"✅ Model loaded: {model_path}")
 
     # Open camera stream
+    print(f"Connecting to camera: {camera_url}")
     cap = cv2.VideoCapture(camera_url)
     if not cap.isOpened():
-        print(f"❌ Failed to open camera: {camera_url}")
+        print(f"Failed to open camera: {camera_url}")
         return
-
-    print(f"✅ Camera connected: {camera_url}")
 
     try:
         # Capture a single frame
         ret, frame = cap.read()
         if not ret:
-            print("❌ Failed to capture frame")
+            print("Failed to capture frame")
             return
 
         # Preprocess and predict
         processed_frame = preprocess_frame(frame)
         predicted_class, confidence = predict(model, processed_frame)
-        print(f"🔍 Predicted class: {predicted_class}, Confidence: {confidence:.4f}")
+        print(f"Predicted class: {predicted_class}, Confidence: {confidence:.4f}")
 
     finally:
         cap.release()
